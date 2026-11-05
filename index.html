@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#edf6ff">
+<title>色・スポーツ 神経衰弱 2種類</title>
+<style>
+:root {--text:#1e3652;--muted:#617991;--accent:#2767c6;--shadow:0 6px 24px rgba(53,96,150,.11)}
+* {box-sizing:border-box}
+body {margin:0;min-height:100vh;background:radial-gradient(circle at 12% 7%,#fff7d8 0%,transparent 25%),radial-gradient(circle at 85% 20%,#e4e3ff 0%,transparent 23%),linear-gradient(155deg,#e8f3ff,#f7fbff 55%,#eaf6ff);color:var(--text);font-family:Arial,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif}
+button {font:inherit;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+button:focus-visible {outline:4px solid #f1b43d;outline-offset:4px}
+[hidden]{display:none!important}
+.app {max-width:1170px;margin:0 auto;padding:19px 22px 20px}
+header {display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:15px}
+.kicker {color:#4077ac;font-size:12px;font-weight:900;letter-spacing:.15em}
+h1 {font-size:clamp(25px,3.45vw,43px);letter-spacing:-.035em;margin:4px 0 6px;line-height:1.1}
+.explanation {margin:0;color:var(--muted);font-size:14px;font-weight:bold}
+.header-figure {font-size:57px;filter:drop-shadow(0 4px 4px #aec5d8a3)}
+.toolbar {display:flex;align-items:center;flex-wrap:wrap;gap:10px;background:#ffffffdf;border:1px solid white;box-shadow:var(--shadow);border-radius:19px;padding:12px 14px;margin-bottom:15px}
+.modebar {display:flex;gap:4px;padding:4px;background:#e5eff9;border-radius:13px}
+.modebtn {border:0;border-radius:10px;padding:9px 12px;background:transparent;color:#5c7792;font-weight:900;font-size:13px}
+.modebtn.active {background:white;color:#205a97;box-shadow:0 3px 9px #8ca9bf42}
+.stat {display:flex;align-items:center;gap:7px;font-size:15px;font-weight:900;white-space:nowrap}
+.stat strong {color:var(--accent);font-size:22px;font-variant-numeric:tabular-nums}
+.spacer {flex:1}
+.btn {border:0;border-radius:12px;padding:11px 15px;font-size:14px;font-weight:900;transition:transform .13s}
+.btn:active {transform:translateY(2px)}
+.btn-main {background:#2466c0;color:white;box-shadow:0 4px 0 #174a92}
+.btn-soft {background:#e9f3ff;color:#25598f;border:1px solid #c8e2fb}
+.content {display:grid;grid-template-columns:minmax(0,1fr) 239px;gap:15px}
+.board-shell {background:#ffffffd9;border:1px solid white;border-radius:23px;padding:17px;box-shadow:0 15px 34px #7ca0c021}
+.board {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
+.card {position:relative;display:block;width:100%;height:clamp(123px,11vw,158px);padding:0;background:transparent;border:0;border-radius:17px;perspective:750px}
+.card-inner {position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .4s cubic-bezier(.22,.75,.21,1.04)}
+.card.open .card-inner {transform:rotateY(180deg)}
+.face {position:absolute;inset:0;border-radius:16px;display:flex;flex-direction:column;justify-content:center;align-items:center;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.face-front {background:#fff;border:3px solid white;box-shadow:0 6px 0 #dae5ef,0 11px 15px #97b2c62b}
+.face-front::before {content:"";position:absolute;inset:7px;border:2px solid #a5c7e26e;border-radius:10px;pointer-events:none}
+.face-back {background:#f8fdff;border:3px solid #a7d1ff;box-shadow:0 6px 0 #d4e5f4,0 11px 16px #96b2d032;transform:rotateY(180deg)}
+.color-face {background:var(--swatch)!important;color:var(--fg)!important}
+.color-face::before {content:"";position:absolute;inset:8px;border:2px solid var(--ring);border-radius:9px}
+.sport-face {background:linear-gradient(155deg,#fff,#e8f4ff)!important;color:#285a86!important}
+.sport-face::before {content:"";position:absolute;inset:8px;border:2px solid #cbe2f7;border-radius:9px}
+.word {font-weight:1000;font-size:clamp(19px,2.1vw,28px);line-height:1.2;letter-spacing:-.04em;position:relative;text-shadow:0 1px 2px #00000008}
+.emoji {font-family:system-ui,"Segoe UI Emoji","Apple Color Emoji",sans-serif;position:relative;font-size:clamp(40px,4.6vw,66px);line-height:1.18;filter:drop-shadow(0 3px 3px #87a5bd3a)}
+.sport-word {position:relative;font-size:clamp(13px,1.25vw,18px);font-weight:900;margin-top:2px;letter-spacing:-.03em}
+.front-tag {font-size:10px;font-weight:900;opacity:.7;letter-spacing:.14em;margin-top:5px;position:relative}
+.card-number {position:absolute;left:10px;top:9px;z-index:3;min-width:34px;height:34px;padding:0 7px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:#fff;color:#173d6c;border:2px solid #7da9d8;box-shadow:0 2px 5px #183e5d30;font-family:Arial,sans-serif;font-weight:1000;font-size:20px;line-height:1;letter-spacing:0;font-variant-numeric:tabular-nums;pointer-events:none}
+@media(max-width:510px) {.card-number{left:5px;top:5px;min-width:24px;height:24px;padding:0 4px;border-radius:7px;border-width:1.5px;font-size:14px}}
+.card.matched .face-back {border:4px solid #43ba7c;box-shadow:0 6px 0 #c2e9d4,0 8px 12px #4aa77522}
+.card.matched::after {content:"✓";position:absolute;right:6px;top:5px;z-index:2;width:24px;height:24px;border-radius:50%;background:#32ac72;color:#fff;font-weight:1000;display:grid;place-items:center;font-size:17px;box-shadow:0 2px 5px #35694a66}
+.card:disabled {cursor:default}
+.board-note {margin-top:11px;text-align:center;color:#64819b;font-size:12px;font-weight:800}
+aside {display:flex;flex-direction:column;gap:13px}
+.englishbox,.feedback {border-radius:20px;box-shadow:var(--shadow);padding:19px 17px}
+.englishbox {background:#fff;flex:1;display:flex;flex-direction:column;justify-content:space-between;gap:14px}
+.smallhead {font-size:11px;letter-spacing:.13em;font-weight:900;color:#458c9c}
+.question {font-size:21px;font-weight:1000;line-height:1.35;letter-spacing:-.02em;margin-top:9px;min-height:62px}
+.example {font-size:14px;font-weight:800;line-height:1.6;color:#53718c;margin-top:6px}
+.chip {align-self:center;font-size:52px;line-height:1}
+.feedback {background:#e5f2ff;border:1px solid #cfe5f8;min-height:151px;display:flex;flex-direction:column;align-items:stretch;justify-content:center;text-align:center;gap:9px}
+.feedback.success {background:#e3f7eb;border-color:#b8e8ce}
+.feedback.wrong {background:#fff4e0;border-color:#f6deb5}
+.feedback.complete {background:#fff2cb;border-color:#efd792}
+.status {font-size:22px;font-weight:1000;color:#2763a5;line-height:1.2}
+.feedback.success .status {color:#178558}.feedback.wrong .status{color:#a66b0b}
+.desc {font-size:13px;color:#55738e;font-weight:800;line-height:1.5}
+.confetti{font-size:42px;line-height:1}
+footer {text-align:center;color:#71879c;font-size:12px;font-weight:700;margin-top:13px}
+@media(max-width:850px) {.app{padding:13px}.content{grid-template-columns:1fr}.board-shell{padding:12px}.board{gap:9px}.card{height:clamp(105px,18vw,145px)}aside{display:grid;grid-template-columns:1fr 1fr}.englishbox{min-height:125px;padding:14px}.chip{display:none}.question{min-height:0;font-size:19px}.feedback{min-height:120px}.header-figure{font-size:42px}.toolbar{padding:9px}}
+@media(max-width:510px) {h1{font-size:26px}.explanation{font-size:11px}.kicker{font-size:10px}.toolbar{gap:7px}.modebtn{font-size:11px;padding:7px}.stat{font-size:12px}.stat strong{font-size:17px}.btn{font-size:11px;padding:9px}.board{gap:7px}.card{height:clamp(74px,21vw,106px)}.face{border-radius:11px}.face-front::before,.color-face::before,.sport-face::before{inset:4px;border-radius:7px}.word{font-size:17px}.emoji{font-size:37px}.sport-word{font-size:10px}.front-tag{font-size:8px}.board-note{font-size:10px}aside{grid-template-columns:1fr}.englishbox{display:none}.feedback{min-height:73px;padding:10px}.status{font-size:19px}.desc{font-size:11px}}
+@media(prefers-reduced-motion:reduce){.card-inner,.btn{transition:none}}
+</style>
+</head>
+<body>
+<main class="app">
+ <header>
+  <div>
+   <div class="kicker">3年生 外国語活動 · MEMORY GAME</div>
+   <h1 id="mainTitle">色 → スポーツ 神経衰弱</h1>
+   <p class="explanation" id="subtitle">色のカードをめくって、同じスポーツを2つ見つけよう！</p>
+  </div>
+  <div class="header-figure" aria-hidden="true">🎮🌟</div>
+ </header>
+ <div class="toolbar">
+  <nav class="modebar" id="modebar" aria-label="ゲームの種類" >
+   <button class="modebtn" id="colorSportBtn" type="button">🎨 色 → スポーツ</button>
+   <button class="modebtn" id="sportColorBtn" type="button">⚽ スポーツ → 色</button>
+  </nav>
+  <div class="stat">ペア <strong id="pairCount" aria-live="polite">0 / 6</strong></div>
+  <div class="spacer"></div>
+  <button class="btn btn-soft" type="button" id="reset">↶ やり直し</button>
+  <button class="btn btn-main" type="button" id="shuffle">🔀 もう1回！</button>
+ </div>
+ <div class="content">
+  <section class="board-shell" aria-label="神経衰弱のカード">
+   <div class="board" id="board"></div>
+   <div class="board-note" id="boardNote">1〜12ばんのカードを2まいめくって、おなじ絵を見つけよう！</div>
+  </section>
+  <aside>
+   <section class="englishbox">
+    <div><div class="smallhead">LET'S SPEAK ENGLISH!</div><div class="question" id="question"></div><div class="example" id="example"></div></div>
+    <div class="chip" aria-hidden="true">🗣️✨</div>
+   </section>
+   <section class="feedback" id="feedback" role="status" aria-live="polite">
+    <div class="status" id="status">Let's start!</div>
+    <div class="desc" id="description">1まい目をえらぼう！</div>
+    <div class="confetti" id="confetti" hidden>🎉🏆🎉</div>
+    <button class="btn btn-main" type="button" id="again" hidden>🔀 もう1回 あそぶ！</button>
+   </section>
+  </aside>
+ </div>
+ <footer>Chromebook対応 · オフラインであそべます · カードは1〜12ばん · 「もう1回！」で毎回ちがう組み合わせに！</footer>
+</main>
+<script>
+(()=>{
+ 'use strict';
+ const initialMode='colorSport';
+ const allowSwitch=true;
+ const colors=[
+   {id:'red',label:'red',swatch:'#e9434a',fg:'#fff',ring:'#ffffffa0'},
+   {id:'blue',label:'blue',swatch:'#2577d5',fg:'#fff',ring:'#ffffffa0'},
+   {id:'yellow',label:'yellow',swatch:'#ffdb51',fg:'#564214',ring:'#95792ba8'},
+   {id:'green',label:'green',swatch:'#32aa6b',fg:'#fff',ring:'#ffffffa0'},
+   {id:'white',label:'white',swatch:'#fbfdff',fg:'#425a76',ring:'#aebfce'},
+   {id:'black',label:'black',swatch:'#283448',fg:'#fff',ring:'#ffffff8b'}
+ ];
+ const sports=[
+   {id:'soccer',label:'soccer',emoji:'⚽'},
+   {id:'basketball',label:'basketball',emoji:'🏀'},
+   {id:'baseball',label:'baseball',emoji:'⚾'},
+   {id:'tennis',label:'tennis',emoji:'🎾'},
+   {id:'volleyball',label:'volleyball',emoji:'🏐'},
+   {id:'swimming',label:'swimming',emoji:'🏊'}
+ ];
+ const $=(id)=>document.getElementById(id);
+ let mode=initialMode, cards=[], opened=[], matched=new Set(),busy=false,round=0,previousKey='';
+ let pending=null;
+ function randomIndex(max){if(window.crypto&&window.crypto.getRandomValues){const n=new Uint32Array(1);window.crypto.getRandomValues(n);return n[0]%max;}return Math.floor(Math.random()*max);}
+ function mix(items){const a=items.slice();for(let i=a.length-1;i>0;i--){let j=randomIndex(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
+ function makeDeck(){
+   const foreground=mode==='colorSport'?colors:sports;
+   const hidden=mode==='colorSport'?sports:colors;
+   // The 12 visible cards and 12 hidden answers are shuffled independently.
+   const fronts=mix(foreground.flatMap(item=>[item,item]));
+   const backs=mix(hidden.flatMap(item=>[item,item]));
+   return fronts.map((front,i)=>({front,back:backs[i],pair:backs[i].id}));
+ }
+ function makeFace(item,side,number){
+   const face=document.createElement('div');face.className='face '+(side==='front'?'face-front':'face-back');
+   const numberBadge=document.createElement('span');
+   numberBadge.className='card-number';numberBadge.textContent=String(number);
+   numberBadge.setAttribute('aria-hidden','true');face.appendChild(numberBadge);
+   const isColor=Object.prototype.hasOwnProperty.call(item,'swatch');
+   face.classList.add(isColor?'color-face':'sport-face');
+   if(isColor){
+     face.style.setProperty('--swatch',item.swatch);face.style.setProperty('--fg',item.fg);face.style.setProperty('--ring',item.ring);
+     const word=document.createElement('span');word.className='word';word.textContent=item.label;face.appendChild(word);
+   }else{
+     const emoji=document.createElement('span');emoji.className='emoji';emoji.textContent=item.emoji;emoji.setAttribute('aria-hidden','true');
+     const word=document.createElement('span');word.className='sport-word';word.textContent=item.label;
+     face.append(emoji,word);
+   }
+   if(side==='front'){
+     const label=document.createElement('span');label.className='front-tag';label.textContent='TAP!';face.appendChild(label);
+   }
+   return face;
+ }
+ function render(){
+   const board=$('board');board.replaceChildren();
+   for(let i=0;i<cards.length;i++){
+     const card=cards[i],button=document.createElement('button');button.type='button';button.className='card';button.dataset.index=i;
+     button.setAttribute('aria-label',`${i+1}ばん ${card.front.label} のカード`);
+     const inner=document.createElement('div');inner.className='card-inner';inner.append(makeFace(card.front,'front',i+1),makeFace(card.back,'back',i+1));
+     button.appendChild(inner);button.addEventListener('click',()=>pick(i));board.appendChild(button);
+   }
+ }
+ function feedback(title,detail,tone=''){$('feedback').className='feedback'+(tone?' '+tone:'');$('status').textContent=title;$('description').textContent=detail;}
+ function setOpen(i,open){const button=$('board').children[i];button.classList.toggle('open',open);button.setAttribute('aria-label',open?`${cards[i].back.label} がでました`:`${i+1}ばん ${cards[i].front.label} のカード`);}
+ function setPhrases(){
+   $('mainTitle').textContent=mode==='colorSport'?'色 → スポーツ 神経衰弱':'スポーツ → 色 神経衰弱';
+   $('subtitle').textContent=mode==='colorSport'?'色のカードをめくって、同じスポーツを2つ見つけよう！':'スポーツのカードをめくって、同じ色を2つ見つけよう！';
+   $('boardNote').textContent=mode==='colorSport'?'2まいめくって、おなじスポーツを見つけよう！':'2まいめくって、おなじ色を見つけよう！';
+   $('question').textContent=mode==='colorSport'?'What color do you want?':'Do you like soccer?';
+   $('example').textContent=mode==='colorSport'?'“Red, please!”  “Here you are!”':'“Yes, I do!”  “No, I don’t.”';
+   for(const [id,m] of [['colorSportBtn','colorSport'],['sportColorBtn','sportColor']]){
+     const btn=$(id);btn.classList.toggle('active',m===mode);btn.setAttribute('aria-pressed',String(m===mode));
+   }
+ }
+ function pick(i){
+   if(busy||matched.has(i)||opened.includes(i)||opened.length===2)return;
+   setOpen(i,true);opened.push(i);
+   if(opened.length===1){feedback('One more!','もう1まい、えらぼう！');return;}
+   const [a,b]=opened;
+   if(cards[a].pair===cards[b].pair){
+     busy=true;feedback('Match! ✨',`${cards[a].back.label} がそろったね！`,'success');
+     const thisRound=round;
+     pending=setTimeout(()=>{
+       if(thisRound!==round)return;
+       for(const idx of [a,b]){matched.add(idx);$('board').children[idx].classList.add('matched');$('board').children[idx].disabled=true;}
+       opened=[];busy=false;pending=null;
+       $('pairCount').textContent=`${matched.size/2} / 6`;
+       if(matched.size===cards.length){feedback('Complete! 🎉','6ペアぜんぶできた！ おめでとう！','complete');$('confetti').hidden=false;$('again').hidden=false;}
+       else {feedback('Good job!','つぎのペアを見つけよう！','success');}
+     },550);
+   } else {
+     busy=true;feedback('Try again!','ちがったね。よく見ておぼえよう！','wrong');
+     const thisRound=round;
+     pending=setTimeout(()=>{
+       if(thisRound!==round)return;
+       setOpen(a,false);setOpen(b,false);opened=[];busy=false;pending=null;
+       feedback('Keep going!','つぎのカードをえらぼう！');
+     },1400);
+   }
+ }
+ function start(isNew){
+   round++;if(pending!==null){clearTimeout(pending);pending=null;}busy=false;opened=[];matched=new Set();
+   if(isNew||!cards.length){let fresh,key,attempt=0;do{fresh=makeDeck();key=fresh.map(c=>`${c.front.id}:${c.back.id}`).join('/');attempt++;}while(key===previousKey&&attempt<10);cards=fresh;previousKey=key;}
+   render();setPhrases();$('pairCount').textContent='0 / 6';$('again').hidden=true;$('confetti').hidden=true;
+   feedback("Let's start!",'1まい目をえらぼう！');
+ }
+ $('reset').addEventListener('click',()=>start(false));
+ $('shuffle').addEventListener('click',()=>start(true));
+ $('again').addEventListener('click',()=>start(true));
+ if(allowSwitch){$('colorSportBtn').addEventListener('click',()=>{if(mode!=='colorSport'){mode='colorSport';previousKey='';start(true);}});$('sportColorBtn').addEventListener('click',()=>{if(mode!=='sportColor'){mode='sportColor';previousKey='';start(true);}});}
+ start(true);
+ // Exposes basic counts for safe offline self-tests, without changing gameplay.
+ Object.defineProperty(window,'memoryGameInfo',{get(){return {mode,count:cards.length,pairs:matched.size/2,opened:opened.slice(),deck:cards.map(c=>({front:c.front.id,back:c.back.id}))};}});
+})();
+</script>
+</body>
+</html>

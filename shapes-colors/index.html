@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#eef8f6">
+  <meta name="description" content="小学校3年生の外国語活動向け、表が色・裏が形／表が形・裏が色を切り替えて遊べる神経衰弱。オフライン対応。">
+  <title>色と形の神経衰弱｜3年生 外国語</title>
+  <style>
+    :root{--ink:#203849;--muted:#617683;--navy:#24506c;--teal:#14887d;--line:#d9e9e7;--cream:#fff;--canvas:#eef8f6;--gold:#f9bb3f}
+    *{box-sizing:border-box}
+    html{-webkit-text-size-adjust:100%}
+    body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 8% 9%,#ddf0fd 0,transparent 32%),radial-gradient(ellipse at 94% 80%,#fff1ce 0,transparent 29%),var(--canvas);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic",Meiryo,sans-serif}
+    button,input{font:inherit}button{cursor:pointer;touch-action:manipulation}button:focus-visible,input:focus-visible{outline:3px solid #e4a421;outline-offset:3px}
+    .page{max-width:1120px;margin:auto;padding:18px 20px 26px}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+    .identity{display:flex;align-items:center;gap:12px}
+    .brand-icon{width:56px;height:56px;flex:none;background:white;border-radius:16px;display:grid;grid-template-columns:repeat(2,1fr);gap:5px;padding:11px;box-shadow:0 5px 16px #194f5920;transform:rotate(-5deg)}
+    .brand-icon span:nth-child(1){border-radius:50%;background:#f46a70}.brand-icon span:nth-child(2){background:#3589da;clip-path:polygon(50% 0,100% 100%,0 100%)}
+    .brand-icon span:nth-child(3){background:#f7d055;border-radius:2px}.brand-icon span:nth-child(4){background:#55b785;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+    .eyebrow{font-size:.76rem;letter-spacing:.14em;color:#19867c;font-weight:900;margin:0 0 3px}
+    h1{font-size:clamp(1.35rem,2.8vw,2rem);line-height:1.3;margin:0}
+    .tag{background:#fff;border:1px solid var(--line);padding:9px 15px;color:#3c7476;font-size:.83rem;font-weight:800;border-radius:40px}
+    .settings{padding:12px 15px 13px;background:#fffc;border:1px solid var(--line);border-radius:19px;box-shadow:0 6px 24px #3a716c0d}
+    .settings-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:11px}
+    .setting-label{font-weight:900;color:#435e6b;font-size:.87rem;white-space:nowrap}
+    .segmented{display:flex;gap:4px;flex-wrap:wrap;padding:4px;border-radius:12px;background:#eff5f4}
+    .choice{border:0;background:transparent;color:#4a6773;padding:9px 13px;border-radius:9px;font-weight:900;font-size:.9rem;white-space:nowrap}
+    .choice[aria-pressed="true"]{background:var(--navy);color:#fff;box-shadow:0 2px 8px #2d5a691e}
+    .choice .direction{opacity:.6;margin:0 4px}
+    .choice[aria-pressed="true"] .direction{opacity:.95}
+    .setting-bottom{display:flex;align-items:center;flex-wrap:wrap;gap:10px 16px;padding-top:10px;border-top:1px solid #e8f0ef}
+    .levels .choice{padding:7px 10px;font-size:.82rem}
+    .toggle{display:inline-flex;align-items:center;gap:8px;color:#3e5d68;font-size:.84rem;font-weight:800;white-space:nowrap;user-select:none;cursor:pointer}
+    .toggle input{appearance:none;position:relative;margin:0;width:38px;height:22px;border-radius:25px;background:#c9d9d9;transition:background .16s;cursor:pointer;flex:none}
+    .toggle input:after{content:"";position:absolute;left:3px;top:3px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px #31505a30;transition:transform .16s}
+    .toggle input:checked{background:#159182}.toggle input:checked:after{transform:translateX(16px)}
+    .restart{margin-left:auto;background:var(--gold);color:#383822;font-size:.87rem;font-weight:900;border:0;border-radius:11px;padding:10px 13px;box-shadow:0 3px 0 #d8a337;white-space:nowrap}
+    .restart:active{transform:translateY(2px);box-shadow:0 1px 0 #d8a337}
+    .hint{display:flex;align-items:center;flex-wrap:wrap;gap:5px 11px;padding:11px 3px 9px;color:#3c6571;font-size:.9rem;font-weight:800}
+    .hint-label{background:#e1f3ee;border-radius:7px;padding:5px 9px;color:#197c6b;white-space:nowrap}
+    .hint strong{color:var(--navy)}
+    .mini-arrow{color:#96a8aa}
+    .stats{display:flex;gap:9px;align-items:stretch;flex-wrap:wrap;margin:1px 0 10px}
+    .stat{display:flex;align-items:center;gap:9px;min-width:116px;background:#fffd;border:1px solid var(--line);border-radius:12px;padding:8px 13px}
+    .stat-icon{font-size:1.16rem}.stat-name{display:block;font-size:.69rem;font-weight:800;color:var(--muted);margin-bottom:1px}.stat-value{font-size:1rem;font-weight:900;font-variant-numeric:tabular-nums}
+    .message{margin-left:auto;align-self:center;max-width:415px;font-weight:900;color:#277a74;font-size:.85rem;line-height:1.6}
+    .progress{height:6px;background:#d5e9e3;border-radius:8px;overflow:hidden;margin-bottom:11px}
+    .progress-fill{height:100%;background:linear-gradient(90deg,#48b69b,#eccb65);width:0;transition:width .35s}
+    .board{max-width:970px;margin:auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+    .board[data-pairs="10"]{grid-template-columns:repeat(5,minmax(0,1fr))}
+    .card{position:relative;background:none;border:0;aspect-ratio:1.65;padding:0;perspective:1000px;border-radius:16px;user-select:none;-webkit-tap-highlight-color:transparent}
+    .card-inner{position:relative;display:block;width:100%;height:100%;transform-style:preserve-3d;transition:transform .42s cubic-bezier(.2,.7,.2,1)}
+    .card.flipped .card-inner,.card.matched .card-inner{transform:rotateY(180deg)}
+    .face{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:15px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:3px solid #e2ebea;box-shadow:0 5px 0 #ccdeda,0 7px 13px #1b60631a}
+    .face-reverse{transform:rotateY(180deg)}
+    .color-face{color:#fff;isolation:isolate}
+    .color-face:after{content:"";position:absolute;inset:0;background:linear-gradient(145deg,#ffffff23,transparent 65%);z-index:-1}
+    .color-face .face-number{background:#ffffffd9;color:#294e60}
+    .shape-face{background:linear-gradient(145deg,#fff,#f5faf9)}
+    .face-number{position:absolute;top:8px;left:9px;border-radius:8px;min-width:28px;height:25px;padding:3px 5px;font-size:.72rem;line-height:19px;font-weight:950;background:#e8f1f3;color:#486979;z-index:1}
+    .shape-symbol{width:70%;height:72%;display:flex;align-items:center;justify-content:center}
+    .shape-symbol svg{width:100%;height:100%;filter:drop-shadow(2px 4px 2px #132b3121)}
+    .face-word{display:none;position:absolute;bottom:7px;left:12px;right:12px;border-radius:7px;background:#fffffff5;color:#2d4c5c;text-align:center;font-size:clamp(.74rem,1.7vw,1.04rem);font-weight:950;line-height:1.35;padding:3px 6px}
+    .with-words .face-word{display:block}
+    .with-words .shape-symbol{transform:translateY(-8px)}
+    .card.matched{cursor:default}.card.matched .face{border-color:#43b891;box-shadow:0 5px 0 #98dbbb,0 7px 13px #1b60631a}
+    .card.matched .face-reverse:after{content:"✓";position:absolute;top:8px;right:9px;display:grid;place-items:center;width:25px;height:25px;background:#d4f5e4;color:#18885f;border-radius:50%;font-size:1rem;font-weight:900}
+    .note{text-align:center;color:#67838c;font-size:.78rem;font-weight:800;margin:15px 0 0;line-height:1.6}
+    .overlay{position:fixed;inset:0;background:#16384b96;backdrop-filter:blur(4px);z-index:10;display:none;align-items:center;justify-content:center;padding:15px}
+    .overlay.show{display:flex}.winbox{max-width:460px;width:100%;background:#fff;border-radius:26px;padding:30px 25px;text-align:center;box-shadow:0 25px 65px #1c394852;animation:pop .3s ease-out}
+    .winbox h2{font-size:2rem;margin:7px 0;color:#205a70}.winbox p{font-size:1rem;font-weight:800;color:#456f78;line-height:1.8;white-space:pre-line}
+    .winbox .restart{margin:8px auto 0;font-size:1rem;padding:12px 23px}.trophy{font-size:3.8rem}
+    .confetti{position:fixed;top:-20px;pointer-events:none;z-index:11;animation:fall linear forwards}
+    @keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:.25}}@keyframes pop{from{transform:scale(.86);opacity:0}to{transform:scale(1);opacity:1}}
+    @media (hover:hover){.card:not(.flipped):not(.matched):hover .card-inner{transform:translateY(-3px)}}
+    @media(max-width:850px){.page{padding:14px 13px 24px}.tag{display:none}.board{gap:9px}.face{border-radius:12px}.restart{margin-left:0}.message{width:100%;max-width:none;margin-left:0}}
+    @media(max-width:600px){.settings{padding:10px}.settings-top{gap:7px}.choice{font-size:.8rem;padding:8px 9px}.setting-bottom{gap:10px}.board,.board[data-pairs="10"]{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.card{aspect-ratio:1.12}.face{border-width:2px;border-radius:11px}.stat{min-width:0;padding:7px 8px;gap:6px;flex:1}.stat-name{font-size:.61rem}.stat-value{font-size:.87rem}.stat-icon{font-size:1.02rem}.face-number{top:5px;left:5px;min-width:23px;height:23px;padding:1px 4px;font-size:.66rem;line-height:19px}.color-symbol{width:72%;height:53%}.shape-symbol{width:80%;height:65%}.face-word{font-size:.72rem;bottom:4px;left:4px;right:4px}.message{font-size:.8rem}.hint{font-size:.78rem}.brand-icon{width:46px;height:46px;padding:9px}.eyebrow{font-size:.67rem}.tag{display:none}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+
+    /* 小学3年生の Chromebook 向け：4列固定・大きなタップ領域・1画面優先 */
+    .board,.board[data-pairs="8"]{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;max-width:800px;width:100%}
+    .board[data-pairs="6"]{max-width:840px}
+    .card{aspect-ratio:1.82;min-height:75px}
+    .card:focus-visible{outline:4px solid #ffb733;outline-offset:3px}
+    .face-number{top:8px;left:9px;display:grid;place-items:center;min-width:31px;height:30px;padding:0 7px;font-size:1.05rem;line-height:1;border-radius:8px}
+    .shape-symbol{width:66%;height:75%}
+    .levels .choice{font-size:.88rem;padding:9px 12px}
+    .hint{padding:9px 3px 7px}
+    .note{margin:10px 0 0}
+    .winbox{outline:4px solid #e3f5ee}
+    @media(max-height:800px) and (min-width:700px){
+      .page{padding-top:10px;padding-bottom:10px}
+      .top{margin-bottom:9px}
+      .settings{padding:8px 12px}
+      .settings-top{margin-bottom:7px}
+      .setting-bottom{padding-top:7px}
+      .board,.board[data-pairs="8"]{max-width:710px;gap:8px}
+      .board[data-pairs="6"]{max-width:790px}
+      .card{aspect-ratio:1.95}
+      .stats{margin-bottom:7px}
+      .progress{margin-bottom:7px}
+      .hint{padding:6px 3px}
+    }
+    @media(max-width:600px){
+      .board,.board[data-pairs="8"]{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+      .card{aspect-ratio:1.04;min-height:62px}
+      .face-number{top:4px;left:4px;min-width:22px;height:22px;font-size:.76rem;border-radius:5px}
+      .setting-bottom{gap:9px}
+      .levels .choice{font-size:.75rem;padding:8px 7px}
+      .shape-symbol{width:83%;height:70%}
+      .face-word{font-size:.58rem}
+    }
+  </style>
+</head>
+<body>
+<main class="page">
+  <header class="top">
+    <div class="identity">
+      <div class="brand-icon" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+      <div><p class="eyebrow">COLORS × SHAPES</p><h1>色と形の神経衰弱</h1></div>
+    </div>
+    <div class="tag">3年生 外国語活動</div>
+  </header>
+
+  <section class="settings" aria-label="ゲームの設定">
+    <div class="settings-top">
+      <span class="setting-label">カードのおもて・うら</span>
+      <div class="segmented" role="group" aria-label="カードの表と裏を選ぶ">
+        <button class="choice" type="button" data-mode="color" aria-pressed="true">🎨 おもて：色 <span class="direction">→</span> うら：形</button>
+        <button class="choice" type="button" data-mode="shape" aria-pressed="false">🔷 おもて：形 <span class="direction">→</span> うら：色</button>
+      </div>
+    </div>
+    <div class="setting-bottom">
+      <span class="setting-label">カードの数</span>
+      <div class="segmented levels" role="group" aria-label="カードの数を選ぶ">
+        <button class="choice" data-level="6" type="button" aria-pressed="true">12まい（3×4）</button>
+        <button class="choice" data-level="8" type="button" aria-pressed="false">16まい（4×4）</button>
+      </div>
+      <label class="toggle"><input id="words" type="checkbox"><span>英語の文字</span></label>
+      <label class="toggle"><input id="voice" type="checkbox"><span>英語の音声 🔊</span></label>
+      <button id="new-game" class="restart" type="button">↻ もういっかい！ シャッフル</button>
+    </div>
+  </section>
+
+  <div class="hint" id="hint"><span class="hint-label">あそびかた</span><span id="hint-text">カードをクリックして、うらがえそう！</span><span class="mini-arrow">｜</span><strong>同じ色・同じ形を 2まい そろえよう！</strong></div>
+  <section class="stats" aria-label="ゲームの記録">
+    <div class="stat"><span class="stat-icon" aria-hidden="true">🌟</span><div><span class="stat-name">そろったペア</span><span class="stat-value" id="pairs-score">0 / 6</span></div></div>
+    <div class="stat"><span class="stat-icon" aria-hidden="true">🃏</span><div><span class="stat-name">チャレンジ</span><span class="stat-value" id="turn-score">0 回</span></div></div>
+    <div class="stat"><span class="stat-icon" aria-hidden="true">⏱</span><div><span class="stat-name">じかん</span><span class="stat-value" id="timer">00:00</span></div></div>
+    <div class="message" id="message" aria-live="polite" role="status">2まいのカードをめくって、ペアをさがそう！</div>
+  </section>
+  <div id="progress" class="progress" role="progressbar" aria-label="そろったペア" aria-valuemin="0" aria-valuenow="0" aria-valuemax="6"><div id="progress-fill" class="progress-fill"></div></div>
+  <section id="board" class="board" aria-label="神経衰弱ゲームのカード" data-pairs="6"></section>
+  <p class="note">「もういっかい！」をおすと、カードの場所と色・形のくみあわせが変わるよ！</p>
+</main>
+<div id="overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="win-title">
+  <div class="winbox"><div class="trophy" aria-hidden="true">🏆</div><h2 id="win-title">Excellent!</h2><p id="win-desc">ぜんぶのペアがそろったよ！</p><button type="button" id="again" class="restart">↻ もういっかい！</button></div>
+</div>
+<script>
+(() => {
+  'use strict';
+  const COLORS = [
+    {en:'red',hex:'#e84b57'}, {en:'blue',hex:'#317fdf'}, {en:'yellow',hex:'#f1c332'},
+    {en:'green',hex:'#26a867'}, {en:'pink',hex:'#e96dab'}, {en:'orange',hex:'#ef9227'}
+  ];
+  const SHAPES = ['circle','triangle','square','rectangle','oval','heart','diamond'];
+  const PATHS = {
+    circle:'<circle cx="80" cy="65" r="44"/>',
+    triangle:'<polygon points="80,12 137,112 23,112"/>',
+    square:'<rect x="34" y="19" width="92" height="92" rx="2"/>',
+    rectangle:'<rect x="17" y="34" width="126" height="62" rx="2"/>',
+    oval:'<ellipse cx="80" cy="65" rx="60" ry="39"/>',
+    heart:'<path d="M80 116 C67 103 20 74 20 43 C20 15 54 12 80 39 C106 12 140 15 140 43 C140 74 93 103 80 116 Z"/>',
+    diamond:'<polygon points="80,8 137,65 80,122 23,65"/>'
+  };
+  const $ = id => document.getElementById(id);
+  const board = $('board'), words = $('words'), voice = $('voice'), overlay = $('overlay');
+  let mode = 'color';
+  let totalPairs = 6, cards = [], selected = [], matches = 0, attempts = 0, locked = false;
+  let waitTimer = null, clockTimer = null, startTime = null, elapsedMs = 0, lastSet = '', lastLayout = '';
+
+  function shuffle(items) {
+    const arr = items.slice();
+    for (let i=arr.length-1;i>0;i--) { const j = Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
+    return arr;
+  }
+
+  function makeCombos(n) {
+    // どちらのモードでも、おもての情報だけで正解が分からないように、
+    // 1つの色・形をそれぞれ別の組み合わせでも使う。
+    const c = shuffle(COLORS).slice(0,n/2);
+    const s = shuffle(SHAPES).slice(0,n/2);
+    const count = c.length;
+    return shuffle(c.flatMap((color,i) => [
+      {color,shape:s[i]},
+      {color,shape:s[(i+1)%count]}
+    ]));
+  }
+
+  function randomCombos(n) {
+    let combos;
+    for(let i=0;i<20;i++) {
+      combos = makeCombos(n);
+      const sig = combos.map(x => x.color.en + ':' + x.shape).sort().join('|');
+      if(sig !== lastSet){ lastSet = sig; return combos; }
+    }
+    return combos;
+  }
+
+  function shapeSvg(shape) {
+    return `<svg viewBox="0 0 160 130" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><g fill="#356482" stroke="#1d425d" stroke-width="3.5" stroke-linejoin="round">${PATHS[shape]}</g></svg>`;
+  }
+
+  function renderFace(type,card,reverse) {
+    const number = `<span class="face-number">${card.id + 1}</span>`;
+    const isColor = type === 'color';
+    const faceClass = reverse ? 'face face-reverse' : 'face';
+    if (isColor) return `<span class="${faceClass} color-face" style="background:${card.color.hex}">${number}<span class="face-word">${card.color.en}</span></span>`;
+    return `<span class="${faceClass} shape-face">${number}<span class="shape-symbol" aria-hidden="true">${shapeSvg(card.shape)}</span><span class="face-word">${card.shape}</span></span>`;
+  }
+
+  function render() {
+    board.dataset.pairs = String(totalPairs);
+    board.dataset.grid = totalPairs===6 ? '3x4' : '4x4';
+    board.classList.toggle('with-words',words.checked);
+    const frontType = mode, reverseType = mode === 'color' ? 'shape' : 'color';
+    board.innerHTML = cards.map(card => `<button class="card" type="button" data-id="${card.id}" aria-label="カード ${card.id+1}、${frontType==='color'?card.color.en:card.shape} が おもて" aria-pressed="false"><span class="card-inner">${renderFace(frontType,card,false)}${renderFace(reverseType,card,true)}</span></button>`).join('');
+    $('hint-text').textContent = mode === 'color'
+      ? '色を見てえらぼう！ クリックすると形が出るよ。'
+      : '形を見てえらぼう！ クリックすると色が出るよ。';
+  }
+
+  function updateStats() {
+    $('pairs-score').textContent = `${matches} / ${totalPairs}`;
+    $('turn-score').textContent = `${attempts} 回`;
+    $('progress').setAttribute('aria-valuenow',String(matches));
+    $('progress').setAttribute('aria-valuemax',String(totalPairs));
+    $('progress-fill').style.width = (100*matches/totalPairs)+'%';
+  }
+
+  function updateTime() {
+    const seconds = Math.floor(elapsedMs/1000);
+    $('timer').textContent = `${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`;
+  }
+
+  function startClock() {
+    if (startTime !== null) return;
+    startTime = Date.now();
+    clockTimer = setInterval(() => {elapsedMs=Date.now()-startTime; updateTime();},500);
+  }
+
+  function stopClock() {
+    if (clockTimer !== null) clearInterval(clockTimer);
+    clockTimer = null;
+    if (startTime !== null) elapsedMs = Date.now()-startTime;
+    updateTime();
+  }
+
+  function speak(phrase) {
+    if (!voice.checked || !('speechSynthesis' in window)) return;
+    try {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(phrase);
+      utterance.lang = 'en-US'; utterance.rate=.8;
+      const english = window.speechSynthesis.getVoices().find(v => /^en[-_]/i.test(v.lang));
+      if(english) utterance.voice=english;
+      window.speechSynthesis.speak(utterance);
+    } catch (_) { /* 端末で音声が使えなくても遊べる */ }
+  }
+
+  function updateCard(card) {
+    const el = board.querySelector(`[data-id="${card.id}"]`);
+    if(!el) return;
+    el.classList.toggle('flipped',card.open);
+    el.classList.toggle('matched',card.matched);
+    const shown = mode === 'color'
+      ? (card.open || card.matched ? card.shape : card.color.en)
+      : (card.open || card.matched ? card.color.en : card.shape);
+    el.setAttribute('aria-label',`カード ${card.id+1}、${shown}${card.matched?'、ペアになりました':''}`);
+    el.setAttribute('aria-pressed',String(card.open || card.matched));
+    el.disabled = card.matched;
+  }
+
+  function reset() {
+    if (waitTimer !== null) clearTimeout(waitTimer);
+    waitTimer=null;
+    stopClock(); startTime=null; elapsedMs=0; updateTime();
+    if('speechSynthesis' in window) window.speechSynthesis.cancel();
+    matches=0; attempts=0; selected=[]; locked=false;
+    const combos = randomCombos(totalPairs);
+    const doubled = combos.flatMap((pair,pairId) => [
+      {...pair,pairId},{...pair,pairId}
+    ]);
+    let entries = shuffle(doubled);
+    // めずらしい同じ並びの連続も防ぐ。
+    for (let tries=0;tries<10;tries++) {
+      if (entries.map(e=>e.color.en+e.shape).join('|') !== lastLayout) break;
+      entries=shuffle(doubled);
+    }
+    lastLayout=entries.map(e=>e.color.en+e.shape).join('|');
+    cards = entries.map((card,id) => ({...card,id,open:false,matched:false}));
+    overlay.classList.remove('show');
+    render(); updateStats();
+    $('message').textContent='カードを2まい クリックしてみよう！';
+  }
+
+  function celebrate() {
+    $('win-desc').textContent = `${totalPairs}ペア、ぜんぶクリア！\n${attempts}回でそろえたよ。Great job!`;
+    overlay.classList.add('show'); $('again').focus();
+    const palette=['#f5c353','#eb7ba0','#62beaa','#6aa3e6','#a58be2'];
+    for(let i=0;i<30;i++){
+      const bit=document.createElement('span'); bit.className='confetti';
+      bit.style.left=Math.random()*100+'%';
+      bit.style.width=(5+Math.random()*8)+'px';bit.style.height=(8+Math.random()*10)+'px';
+      bit.style.background=palette[i%palette.length];
+      bit.style.animationDuration=(2+Math.random()*2.5)+'s';
+      bit.style.animationDelay=(Math.random()*.5)+'s';
+      document.body.appendChild(bit);
+      setTimeout(()=>bit.remove(),5600);
+    }
+  }
+
+  function flip(card) {
+    if (locked || card.open || card.matched || selected.length >= 2) return;
+    startClock(); card.open=true;selected.push(card);updateCard(card);
+    const revealed = mode === 'color' ? card.shape : card.color.en;
+    speak(mode === 'color' ? (revealed === 'oval' ? 'an oval' : 'a '+revealed) : revealed);
+    if(selected.length===1) {$('message').textContent='もう1まい めくってみよう！';return;}
+    attempts++;locked=true;updateStats();
+    const [a,b]=selected;
+    if(a.pairId===b.pairId) {
+      $('message').textContent=`Good job! ${a.color.en} ${a.shape} のペア！`;
+      waitTimer=setTimeout(()=>{
+        a.matched=true;b.matched=true;a.open=false;b.open=false;
+        updateCard(a);updateCard(b);matches++;
+        speak(a.color.en+' '+a.shape);
+        selected=[];locked=false;updateStats();
+        if(matches===totalPairs){stopClock();$('message').textContent='Excellent! ぜんぶそろったよ！';waitTimer=setTimeout(celebrate,400);}
+      },650);
+    } else {
+      $('message').textContent='Nice try! 色と形をよく おぼえよう！';
+      waitTimer=setTimeout(()=>{
+        a.open=false;b.open=false;updateCard(a);updateCard(b);
+        selected=[];locked=false;
+        $('message').textContent='つぎの2まいを えらぼう！';
+      },1700);
+    }
+  }
+
+  board.addEventListener('click',event=>{
+    const button=event.target.closest('.card');
+    if(!button || !board.contains(button)) return;
+    const card=cards[Number(button.dataset.id)];if(card) flip(card);
+  });
+  document.querySelectorAll('[data-mode]').forEach(button=>{
+    button.addEventListener('click',()=>{
+      if(mode===button.dataset.mode)return;
+      mode=button.dataset.mode;
+      document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));
+      reset();
+    });
+  });
+  document.querySelectorAll('[data-level]').forEach(button=>{
+    button.addEventListener('click',()=>{
+      const n=Number(button.dataset.level);if(totalPairs===n)return;
+      totalPairs=n;
+      document.querySelectorAll('[data-level]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.level)===n)));
+      reset();
+    });
+  });
+  words.addEventListener('change',()=>board.classList.toggle('with-words',words.checked));
+  voice.addEventListener('change',()=>{if(!voice.checked && 'speechSynthesis' in window)window.speechSynthesis.cancel();});
+  $('new-game').addEventListener('click',reset);
+  $('again').addEventListener('click',reset);
+  reset();
+})();
+</script>
+</body>
+</html>
